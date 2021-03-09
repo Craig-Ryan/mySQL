@@ -15,8 +15,13 @@ connection = pymysql.connect(host='localhost',
 try:
     # Run a query
     with connection.cursor() as cursor:
-      cursor.execute("UPDATE Friends SET age = 22 WHERE Name = 'Bob';")
-      connection.commit()
+        list_of_names = ['edge', 'christian', 'eddy']
+        # Prepare a string with the same number of placeholders as in list_of_names
+        format_strings = ','.join(['%s']*len(list_of_names))
+        cursor.execute("DELETE FROM Friends WHERE Name in  ({});".format(format_strings), list_of_names)
+        connection.commit()
 finally:
   # Close the connection
   connection.close()
+
+  
